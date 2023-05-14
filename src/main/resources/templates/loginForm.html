@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="https://www.thymeleaf.org"
+      layout:decorate="~{layouts/defaultLayout}">
+<head>
+    <script>
+        function showPassword() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <form action="#" th:action="@{processLogin}" method="post">
+        Logowanie do konta:
+        </br>
+        <table>
+            <tr>
+                <td>Login:</td>
+                <td><input type="text" required id="username" name="username"></td>
+            </tr>
+            <tr>
+                <td>Hasło:</td>
+                <td><input type="password" required id="password" name="password">
+                <input type="checkbox" onclick="showPassword()">Show Password</td>
+            </tr>
+        </table>
+        <p><input type="submit" value="Zaloguj"></p>
+    </form>
+</div>
+</body>
+</html>

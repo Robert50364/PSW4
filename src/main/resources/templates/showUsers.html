@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl/PL"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:th="https://www.thymeleaf.org"
+	  layout:decorate="~{layouts/defaultLayout}">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container-fluid"  layout:fragment="content">
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Users List</h3>
+			<div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}" style="color: #5cb85c"></div>
+			<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}" style="color: red"></div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							#Id
+						</th>
+						<th>
+							Login:
+						</th>
+						<th>
+							Imie:
+						</th>
+						<th>
+							Nazwisko:
+						</th>
+						<th>
+							Rola:
+						</th>
+						<th>
+							Email:
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="u : ${users}">
+						<form action="#" th:action="@{/showUsersList/edit}" th:object="${editUser}" method="POST">
+							<td>
+								<input name="UserId" th:value="${u.UserId}" readonly>
+							</td>
+							<td>
+								<input name="userName" th:value="${u.userName}" readonly>
+							</td>
+							<td>
+								<input type="text" name="firstName" th:value="${u.firstName}" required>
+							</td>
+							<td>
+								<input type="text" name="lastName" th:value="${u.lastName}" required>
+							</td>
+							<td>
+								<input type="text" name="role" th:value="${u.role}" required>
+							</td>
+							<td>
+								<input type="text" name="email" th:value="${u.email}" required>
+							</td>
+							<td>
+								<input type="submit" value="Edit">
+							</td>
+						</form>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

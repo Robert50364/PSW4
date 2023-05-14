@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Stona Główna</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="css/MainStyle.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <header>
+    <h1>Event Site</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="/home">Strona Główna</a></li>
+      <li><a href="/ivents">Wydarzenia</a></li>
+      <li><a href="/showUsersList/">Użytkownicy</a></li>
+      <li><a href="/stronka">Kontakt</a></li>
+    </ul>
+  </nav>
+  <main>
+    Najlepsze wydarzenia dostępne <a>Tutaj!</a> Zapisz się dziś!
+  </main>
+  <aside>
+    <p>Zalogowano jako:</p>
+    <p>Login: <span th:text="*{username}"></span></p>
+    <p><a href="/register/">Rejestracja</a></p>
+  </aside>
+  <footer>
+    © 2023 PSW pojekt by Robert Nowakowski
+  </footer>
+</body>
+</html>
