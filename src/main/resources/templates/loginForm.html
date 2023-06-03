@@ -19,6 +19,8 @@
     <form action="#" th:action="@{processLogin}" method="post">
         Logowanie do konta:
         </br>
+        <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}" style="color: #5cb85c"></div>
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}" style="color: red"></div>
         <table>
             <tr>
                 <td>Login:</td>

@@ -16,12 +16,13 @@ public class MainPageController {
     private final UserService service;
 
     @GetMapping("/home")
-    public String showLoggedUser(Model model)
+    public String showLoggedUser(Authentication authentication, Model model)
     {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null)
+        if(authentication != null)
         {
-            model.addAttribute("loggedUser", auth);
+            String userName = authentication.getName();
+            //System.out.println("Zalogowany: "+userName);
+            model.addAttribute("loggedUserName", userName);
         }
         return "home.html";
     }

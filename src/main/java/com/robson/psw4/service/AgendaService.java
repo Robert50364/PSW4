@@ -14,6 +14,8 @@ public class AgendaService {
 
     public AgendaService(AgendaRepo agendaRepo) {
         this.agendaRepo = agendaRepo;
+        Agenda agenda = Agenda.builder().agendaId(1).name("PBŚ").build();
+        addAgenda(agenda);
     }
 
     //----------------------------- Methods ------------------------------------

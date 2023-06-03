@@ -2,6 +2,7 @@ package com.robson.psw4.restControler;
 
 import com.robson.psw4.model.Agenda;
 import com.robson.psw4.service.AgendaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class AgendaController {
     @GetMapping("/agendas/{id}")
     public Agenda getAgenda(@PathVariable long id) {
         return agendaService.getAgenda(id);
+    }
+
+    @GetMapping("/agendasName/{id}")
+    public ResponseEntity<String> getAgendaName(@PathVariable long id){
+        String name = agendaService.getAgenda(id).getName();
+        return ResponseEntity.ok(name);
     }
 
     @PostMapping("/agendas")

@@ -1,10 +1,10 @@
 package com.robson.psw4.service;
 
 import com.robson.psw4.dtos.UserDto;
+import com.robson.psw4.dtos.UserEditDto;
 import com.robson.psw4.model.Role;
 import com.robson.psw4.model.User;
 import com.robson.psw4.repozitory.UserRepozitory;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,11 +25,11 @@ public class UserService {
     @Bean
     public void init(){
         User admin = User.builder()
-                .userName("admin")
+                .username("admin")
                 .password(passwordEncoder.encode("admin"))
                 .firstName("admin")
                 .lastName("admin")
-                .email("admin@admin.admin")
+                .email("admin@domain.admin")
                 .role(Role.ADMIN)
                 .build();
         repozitory.save(admin);
@@ -42,10 +42,12 @@ public class UserService {
     public User getUser(long id){
         return repozitory.findById(id).orElseThrow();
     }
+
+    public User getUserByUsername(String username){return repozitory.findUserByUsername(username).orElseThrow();}
     public User createUser(UserDto userDto){
 
         User user = User.builder()
-                .userName(userDto.getUserName())
+                .username(userDto.getUserName())
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
@@ -56,19 +58,18 @@ public class UserService {
             user.setRole(Role.USER);
         }
         repozitory.save(user);
-        System.out.println("Zarejestrowano: " + user.getUserName());
+        System.out.println("Zarejestrowano: " + user.getUsername());
         return user;
     }
 
     @Transactional
-    public User editUser(User user){
+    public User editUser(UserEditDto user){
         User editedUser = repozitory.findById(user.getUserId()).orElseThrow();
-        editedUser.setUserName((user.getUserName()!= null)? user.getUserName() : editedUser.getUserName());
-        editedUser.setPassword((user.getPassword()!= null)? passwordEncoder.encode(user.getPassword()) : editedUser.getPassword());
-        editedUser.setEmail((user.getEmail()!= null)? user.getEmail() : editedUser.getEmail());
-        editedUser.setFirstName((user.getFirstName() != null)? user.getFirstName(): editedUser.getFirstName());
-        editedUser.setLastName((user.getLastName() != null)? user.getLastName() : editedUser.getLastName());
-        editedUser.setRole((user.getRole()!= null)? user.getRole() : editedUser.getRole());
+        editedUser.setUsername(user.getUsername());
+        editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        editedUser.setEmail(user.getEmail());
+        editedUser.setFirstName(user.getFirstname());
+        editedUser.setLastName(user.getLastname());
         return repozitory.save(editedUser);
     }
 

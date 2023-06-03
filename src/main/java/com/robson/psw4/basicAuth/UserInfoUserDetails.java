@@ -1,16 +1,8 @@
 package com.robson.psw4.basicAuth;
 
-import com.robson.psw4.model.Role;
-import com.robson.psw4.model.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
+/*
+@Data
+@Builder
 public class UserInfoUserDetails implements UserDetails {
 
     private String username;
@@ -60,3 +52,5 @@ public class UserInfoUserDetails implements UserDetails {
         return true;
     }
 }
+
+ */

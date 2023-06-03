@@ -5,21 +5,16 @@
     <meta charset="UTF-8"/>
     <title>Register</title>
     <link rel="stylesheet" href="/css/registerStyle.css">
-    <link rel="stylesheet" href="registerStyle.css">
     <script>
-        var pass = document.getElementById("pass");
-        var cpass = document.getElementById("cpass")
+        function validatePassword(){
+            var password = document.getElementById("pass");
+            var confirm_password = document.getElementById("cpass");
 
-        function validatePass()
-        {
-            if(pass.value != cpass.value)
-            {
-                cpass.setCustomValidity("Password don't match");
-            }else{
-                cpass.setCustomValidity('');
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
             }
-            pass.onchange = validatePass();
-            cpass.onkeyup = validatePass();
         }
     </script>
 </head>
@@ -43,11 +38,11 @@
               </tr>
               <tr>
                  <td>Hasło:</td>
-                 <td><input type="password" required id="pass" th:field="*{password}"></td>
+                 <td><input type="password" required th:field="*{password}" id="pass" onchange="validatePassword()"></td>
               </tr>
               <tr>
                   <td>Powtórz hasło:</td>
-                  <td><input type="password" required id="cpass" th:field="*{confirmPassword}"></td>
+                  <td><input type="password" required th:field="*{confirmPassword}" id="cpass" onkeyup="validatePassword()"></td>
               </tr>
               <tr>
                   <td>Email:</td>

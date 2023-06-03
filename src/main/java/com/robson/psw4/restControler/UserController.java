@@ -1,6 +1,7 @@
 package com.robson.psw4.restControler;
 
 import com.robson.psw4.dtos.UserDto;
+import com.robson.psw4.dtos.UserEditDto;
 import com.robson.psw4.model.User;
 import com.robson.psw4.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -30,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public User editUser(@RequestBody User user){return service.editUser(user);}
+    public User editUser(@RequestBody UserEditDto user){return service.editUser(user);}
 
     @DeleteMapping("/users{id}")
     public void deleteUser(@PathVariable long id){service.deleteUser(id);}

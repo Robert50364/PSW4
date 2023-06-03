@@ -1,6 +1,5 @@
 package com.robson.psw4.service;
 
-import com.robson.psw4.basicAuth.UserInfoUserDetails;
 import com.robson.psw4.model.User;
 import com.robson.psw4.repozitory.UserRepozitory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,7 @@ public class UserInfoDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = repozitory.findUserByUserName(username);
-
-        return user.map(UserInfoUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found" + username));
+        Optional<User> user = repozitory.findUserByUsername(username);
+        return user.orElseThrow();
     }
 }

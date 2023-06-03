@@ -1,4 +1,4 @@
-package com.robson.psw4.JWT;
+package com.robson.psw4.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class LoginDto {
 
-    private String userName;
+    private String login;
     private String password;
 }

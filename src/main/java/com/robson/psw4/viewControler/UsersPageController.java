@@ -1,24 +1,15 @@
 package com.robson.psw4.viewControler;
 
-import com.robson.psw4.model.User;
-import com.robson.psw4.repozitory.UserRepozitory;
-import com.robson.psw4.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/showUsersList")
 public class UsersPageController {
 
+    /*
     private final UserService service;
     @GetMapping("/")
     public String showUserListPage(Model model){
@@ -38,4 +29,5 @@ public class UsersPageController {
         redirectAttributes.addFlashAttribute("success", "Użytkownik został zedytowany.");
         return "redirect:/showUsersList/";
     }
+    */
 }

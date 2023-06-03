@@ -2,11 +2,13 @@ package com.robson.psw4.restControler;
 
 import com.robson.psw4.model.Ivent;
 import com.robson.psw4.service.IventService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(allowedHeaders = {"Access-Control-Allow-Origin"})
 public class IventController {
 
     private final IventService service;
@@ -15,6 +17,7 @@ public class IventController {
         this.service = service;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/ivents")
     public List<Ivent> getIvents(){
        return service.getIvents();

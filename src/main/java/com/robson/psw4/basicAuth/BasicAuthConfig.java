@@ -1,31 +1,33 @@
 package com.robson.psw4.basicAuth;
 
-import com.robson.psw4.model.Role;
-import com.robson.psw4.model.User;
-import com.robson.psw4.service.UserInfoDetailsService;
-import com.robson.psw4.service.UserService;
-import jakarta.annotation.PostConstruct;
+import com.robson.psw4.JWT.JwtAuthenticationFilter;
+import com.robson.psw4.repozitory.UserRepozitory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class BasicAuthConfig {
 
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final UserRepozitory repozitory;
     @Bean
     public UserDetailsService userDetailsService(){
-
-        return new UserInfoDetailsService();
+        return username -> repozitory.findUserByUsername(username).orElseThrow();
     }
 
     private static final String[] AUTH_BLACKLIST = {
@@ -33,7 +35,8 @@ public class BasicAuthConfig {
     };
 
     private static final String[] AUTH_ADMINLIST = {
-            "/showUsersList"
+            "/showUsersList/**",
+            "/showUsersList",
     };
 
     @Bean
@@ -41,18 +44,19 @@ public class BasicAuthConfig {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .requestMatchers(AUTH_BLACKLIST).authenticated()
-                .requestMatchers(AUTH_ADMINLIST).hasAuthority("ADMIN")
+                .requestMatchers(AUTH_BLACKLIST).hasAuthority("ADMIN")
+                //.requestMatchers(AUTH_ADMINLIST).hasAuthority("ADMIN")
                 .anyRequest().permitAll()
-                .and().headers().frameOptions().disable()
-                //.and().formLogin();
-                .and().formLogin(form -> form
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .loginPage("/login/")
-                        //.failureUrl("/login?fail")
-                        .loginProcessingUrl("/login/processLogin")
-                );
+                //Uwaga JWT
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .and().headers().frameOptions().disable();
+                //Koniec JWT
 
         return http.build();
     }
@@ -68,6 +72,11 @@ public class BasicAuthConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(userDetailsService());
         return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 }

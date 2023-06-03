@@ -1,8 +1,16 @@
 package com.robson.psw4.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Ivent {
 
     @Id
@@ -10,39 +18,8 @@ public class Ivent {
     private long iventId;
     private String iventName;
     private String date;
-    private String agenda;
 
-
-    //--------------------------------- Getters & Setters ---------------------------------
-    public long getIventId() {
-        return iventId;
-    }
-
-    public void setIventId(long iventId) {
-        this.iventId = iventId;
-    }
-
-    public String getIventName() {
-        return iventName;
-    }
-
-    public void setIventName(String iventName) {
-        this.iventName = iventName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getAgenda() {
-        return agenda;
-    }
-
-    public void setAgenda(String agenda) {
-        this.agenda = agenda;
-    }
+    @ManyToOne
+    @JoinColumn(name = "agendaId")
+    private Agenda agenda;
 }

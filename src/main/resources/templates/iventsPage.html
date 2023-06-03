@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/defaultLayout}">
+<head>
+    <title>Ivents List</title>
+    <link rel="stylesheet" href="/css/eventEditModal.css">
+</head>
+<body>
+<div layout:fragment="content">
+    Zapisz się już dziś!
+    <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}" style="color: #5cb85c"></div>
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}" style="color: red"></div>
+    <table id="iventTable">
+        <thead>
+        <tr>
+            <th>Nazwa wydarzenia</th>
+            <th>Organizator</th>
+            <th>Data wydarzenie</th>
+            <th>Typ uczestnictwa</th>
+            <th>Preferencje żywnościowe</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <form id="eventRecordForm" action="#" th:object="${eventRecord}" th:action="@{/iventsPage/joinToEvent}" method="post">
+                <td>
+                    <select name="ivent" onchange="loadIvent(this.value, false)">
+                        <option value="">Please select...</option>
+                        <option th:each="i : ${ivents}" th:value="${i.iventId}" th:text="${i.iventName}"></option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="agenda" id="agenda" readonly>
+                </td>
+                <td>
+                    <input type="text" name="date" id="date" readonly>
+                </td>
+                <td>
+                    <select name="participationType" >
+                        <option th:value="Słuchacz">Słuchacz</option>
+                        <option th:value="Autor">Autor</option>
+                        <option th:value="Sponsor">Sponsor</option>
+                        <option th:value="Organizator">Organizator</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="foodReference" >
+                        <option th:value="Bez_preferencji">Bez preferencji</option>
+                        <option th:value="Wegetariańskie">Wegetariańskie</option>
+                        <option th:value="Bez_glutenu">Bez glutenu</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="submit" value="Zapisz się!" id="sumButton" disabled="disabled">
+                    <input id="showEditModalBtn" type="button" value="Edytuj" onclick="openEditModal()" th:if="${isAdmin}">
+                    <input id="showAddModalBtn" type="button" value="Dodaj" onclick="openAddEventModal()" th:if="${isAdmin}">
+                </td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Uwaga Modal -->
+    <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edycja eventu</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <!-- Formularz edycji -->
+                    <form id="editForm" action="#" th:object="${eventRecord}" method="post">
+                        <!-- Pola formularza -->
+                        <select id="editEventId" name="event" onchange="loadIvent(this.value, true)">
+                            <option value="">Please select...</option>
+                            <option th:each="i : ${ivents}" th:value="${i.iventId}" th:text="${i.iventName}"></option>
+                        </select>
+                        <p>Nazwa: <input type="text" name="iventName" id="eventNameAdmin"></p>
+                        <p>Agenda: <input type="text" name="agenda" id="agendaAdmin"></p>
+                        <p>Data: <input type="text" name="date" id="dateAdmin"></p>
+
+                        <p><button type="button" class="btn btn-primary" onclick="submitDeleteForm()">Usuń</button></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitEditForm()">Zapisz</button>
+                </div>
+            </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        function loadIvent(id, admin){
+            if(id == ""){
+                document.getElementById('agenda').value = "";
+                document.getElementById('date').value = "";
+                document.querySelector('#sumButton').disabled = true;
+                return 0;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', '/ivents/' + id, true);
+
+            if(admin == false){
+                document.querySelector('#sumButton').disabled = false;
+                xhr.onload = function (){
+                    if(xhr.status === 200){
+                        var event = JSON.parse(xhr.responseText);
+                        var eventAgenda = document.getElementById('agenda');
+                        var eventDate = document.getElementById('date');
+                        eventAgenda.value = event.agenda.name;
+                        eventDate.value = event.date;
+
+                    }
+                };
+                xhr.send();
+            }else {
+                xhr.onload = function (){
+                    if(xhr.status === 200){
+                        var event = JSON.parse(xhr.responseText);
+                        var eventName = document.getElementById('eventNameAdmin');
+                        var eventAgenda = document.getElementById('agendaAdmin');
+                        var eventDate = document.getElementById('dateAdmin');
+                        eventName.value = event.iventName;
+                        eventAgenda.value = event.agenda.name;
+                        eventDate.value = event.date;
+                    }
+                };
+                xhr.send();
+            }
+        }
+
+
+        function openEditModal(){
+            var modal = document.getElementById("editModal");
+            var closeButton = modal.querySelector(".close");
+
+            modal.style.display = "block";
+
+            closeButton.addEventListener("click", function() {
+                modal.style.display = "none";});
+        }
+
+
+        function submitEditForm() {
+            // Wykonanie żądania POST (za pomocą AJAX) do zapisu zmian w evencie
+            // ...
+
+            // Zamknięcie modala
+            var modal = document.getElementById("editModal");
+            modal.style.display = "none";
+        }
+
+        function submitDeleteForm(){
+            var id = document.getElementById("editEventId").value;
+            fetch('/ivents/' + id, {method: 'DELETE'})
+                .then(response => {
+                    if(response.ok){
+                        //Ok response
+                        location.reload();
+                    }else {
+                        //Bad response
+                    }
+                })
+                .catch(error => {
+                    console.error("Błąd podczas żądania DELETE", error);
+                });
+        }
+    </script>
+</div>
+</body>
+</html>
